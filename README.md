@@ -8,8 +8,8 @@ from Bio.Blast import NCBIXML
 from Bio import SearchIO
 
 list=[]
-in_file =  'sORF_cross_transcriptome_NA.fasta' #'joined_lncRNA_cantata_greenc_our_lncRNA' #'sORF_cross_transcriptome_NA.fasta'#'sORF_cross_transcriptome_NA.fasta'
-DB_file = '4GBrowse_merged_sorted_edited.fa'#'joined_lncRNA_cantata_greenc_our_lncRNA'#'joined_lncRNA_cantata_greenc_our_lncRNA'#'joined_transcriptome_v1.6' #'joined_CDS_v3.3_and_v1.6'#'joined_three_UTR_v3.3_and_v1.6'
+in_file =  ''
+DB_file = ''
 Similarity = 90
 Evalue = 1e-5
 no_hits_ind = 0
@@ -55,11 +55,6 @@ with open('HIT', 'w') as hit, open ('BLAST_MASK', 'w') as BLAST_MASK, open('quer
             hs = HSP.hsps
 
             for u in hs:
-
-                """print(u)
-                print(u.ident_num)
-                print(u.ident_num*100/len(u.query))
-                print(u.evalue)"""
                 if u.evalue<=Evalue and u.ident_num*100/len(u.query) >= Similarity:
                     sequence = sequence.replace(sequence[u.query_range[0]:u.query_range[1]], 'n' * len(u.query))
                     indicator += 1
@@ -70,7 +65,7 @@ with open('HIT', 'w') as hit, open ('BLAST_MASK', 'w') as BLAST_MASK, open('quer
                     SeqIO.write(u.hit,hit,'fasta')
                     cal+=1
             coverage = sequence.count('n')*100/len(sequence)
-            #Coverage calculation based on masking results
+            #Coverage calculation based on the masking results
             if coverage>=Coverage and indicator >= 1:
                 number_of_hits+=1
                 BLAST_MASK.write(('>' +recor.id+'_'+str(HSP.id) + '\n' + str(sequence) + '\n'))
